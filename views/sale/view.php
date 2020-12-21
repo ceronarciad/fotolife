@@ -26,7 +26,6 @@ $this->title = $ticket->id;
                             <thead>
                                 <tr>
                                     <th>Cantidad</th>
-                                    <th>Producto ID</th>
                                     <th>Producto</th>
                                     <th>Precio</th>
                                     <th>Subtotal</th>
@@ -36,9 +35,14 @@ $this->title = $ticket->id;
                                 <?php
                                  foreach ($ticketDetails as $key => $value) {
                                     echo "<tr>";
-                                        foreach ($value as $item) {
-                                            echo "<td>".$item."</td>";
-                                        }
+                                    $counter = 0;
+                                            foreach ($value as $item) {
+                                                $counter ++;
+                                                echo "<td>";
+                                                echo ($counter == 3 || $counter == 4) ? '$': '';
+                                                echo $item;
+                                                echo "</td>";
+                                            }
                                     echo "</tr>";
                                 }
                                 ?>

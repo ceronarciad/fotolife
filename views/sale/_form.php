@@ -20,7 +20,6 @@ use kartik\select2\Select2;
         text-align:center;
         vertical-align:middle;
     }
-
 </style>
 
 
@@ -106,7 +105,7 @@ use kartik\select2\Select2;
                                 <td></td>
                                 <td></td>
                                 <td>Total a pagar</td>
-                                <td><input size='12' type='text' id='total_payment' name='total_payment' value='' readonly></td>
+                                <td><input size='12' type='text' id='total_payment' name='total_payment' value='0' readonly></td>
                                 <td></td>
                                 </tr>
                                 
@@ -164,10 +163,20 @@ use kartik\select2\Select2;
             $('#row_3').hide();
             $('#row_4').hide();
             $('#row_5').hide();
-            $("#input_quantity_1").ForceNumericOnly();
-
+            $("input").ForceNumericOnly();
             $("#boton-save").hide();
             
+            $("#total_payment").change(function(e){
+               var total = $("#total").val();
+               var total_payment = $("#total_payment").val();
+            
+                if(total_payment > 0 && total >= total_payment){
+                    $("#boton-save").show();
+                }else{
+                    $("#boton-save").hide();
+                }
+            });
+
             $("input").change(function(e){
                 const id = e.currentTarget.attributes.id.nodeValue;
                 var id_number = id.split("_");
@@ -340,14 +349,6 @@ use kartik\select2\Select2;
                     $( "#total_payment").prop('readonly', false);
                 }else{
                     $( "#total_payment").prop('readonly', true);
-                }
-
-               var total_payment = $( "#total_payment").val();
-                
-                if(total_payment > 0){
-                    $("#boton-save").show();
-                }else{
-                    $("#boton-save").hide();
                 }
             }
 

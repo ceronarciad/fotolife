@@ -57,10 +57,10 @@ class SaleController extends Controller
 
         $query = new \yii\db\Query();
         $query->from(['d' => 'ticket_detail'])
-        ->select(['COUNT(*) AS count','p.id','p.name', 'd.amount', 'SUM(d.amount) as total'])
+        ->select(['COUNT(*) AS count','p.name', 'd.amount', 'SUM(d.amount) as total'])
         ->innerJoin(['p'=>'products'],'d.id_product = p.id')
         ->andWhere(['d.id_ticket' => $ticket->id])
-        ->groupBy(['p.id','p.name', 'd.amount'])
+        ->groupBy(['p.name', 'd.amount'])
         ->all();
 
         $ticketDetails = $query->all();
