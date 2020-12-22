@@ -75,8 +75,8 @@ class MeetingController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $modelcustomer = Customer::findOne($model->id_customer);
         $ticket = Ticket::find()->where(['id_meeting' => $model->id])->one();
+        $modelcustomer = Customer::findOne($ticket->id_customer);
         //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         //return $ticket;
 
@@ -151,29 +151,35 @@ class MeetingController extends Controller
         $transaction = Yii::$app->db->beginTransaction();
         if ($model->load(Yii::$app->request->post()) && $modelcustomer->load(Yii::$app->request->post())) {
             try  {
-                if($modelcustomer->save()){
-                    $model->id_customer = $modelcustomer->id;
-                    $serviceData = Service::find()->where(['id' => $model->id_service])->one();
 
-                    if ($model->save()) {
-                        $modelticket->total = $serviceData->price;
-                        $modelticket->date_ticket = date("Y-m-d");
-                        $modelticket->id_meeting = $model->id;
-                        $modelticket->save(false);
+                if($modelcustomer->id == 0){
+                    $modelcustomer->save();
 
-                        $modelticketdetails->amount = $serviceData->price;
-                        $modelticketdetails->date_ticket = date("Y-m-d");
-                        $modelticketdetails->id_ticket =  $modelticket->id;
-                        $modelticketdetails->save();
-                        
-                        $transaction->commit();
-                        return $this->redirect(['view', 'id' => $model->id]);
-                    } else {
+                    if($modelcustomer->id == 0){
                         $transaction->rollBack();
                     }
-                }else{
+                }
+
+                $modelticket->id_customer = $modelcustomer->id;
+                $serviceData = Service::find()->where(['id' => $model->id_service])->one();
+
+                if ($model->save()) {
+                    $modelticket->total = $serviceData->price;
+                    $modelticket->date_ticket = date("Y-m-d");
+                    $modelticket->id_meeting = $model->id;
+                    $modelticket->save(false);
+
+                    $modelticketdetails->amount = $serviceData->price;
+                    $modelticketdetails->date_ticket = date("Y-m-d");
+                    $modelticketdetails->id_ticket =  $modelticket->id;
+                    $modelticketdetails->save();
+                        
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
                     $transaction->rollBack();
                 }
+                
             } catch (Exception $e) {
                 $transaction->rollBack();
             }

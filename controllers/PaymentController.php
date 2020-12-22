@@ -87,7 +87,7 @@ class PaymentController extends Controller
         
         if($total_payments <= $ticket->total){
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return "Pago exitoso";
+                return $this->render('success');
             }else{
                 return $this->render('create', [
                     'model' => $model,

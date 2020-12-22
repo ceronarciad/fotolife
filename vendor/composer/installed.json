@@ -2751,30 +2751,31 @@
         },
         {
             "name": "kartik-v/yii2-widget-spinner",
-            "version": "v1.0.1",
-            "version_normalized": "1.0.1.0",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-spinner.git",
-                "reference": "eb10dad17a107bf14f173c99994770ca23c548a6"
+                "reference": "db22bd63fd1c1d3f9d8aa9477842f16338050ff1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-spinner/zipball/eb10dad17a107bf14f173c99994770ca23c548a6",
-                "reference": "eb10dad17a107bf14f173c99994770ca23c548a6",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-spinner/zipball/db22bd63fd1c1d3f9d8aa9477842f16338050ff1",
+                "reference": "db22bd63fd1c1d3f9d8aa9477842f16338050ff1",
                 "shasum": ""
             },
             "require": {
                 "kartik-v/yii2-krajee-base": ">=2.0.0"
             },
-            "time": "2018-10-09T11:54:03+00:00",
+            "time": "2019-05-25T07:33:33+00:00",
+            "default-branch": true,
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.0.x-dev"
                 }
             },
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "kartik\\spinner\\": "src"

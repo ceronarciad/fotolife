@@ -30,7 +30,8 @@
         "loveorigami/yii2-modal-ajax": "@dev",
         "kartik-v/yii2-money": "dev-master",
         "wdmg/yii2-editor": "^1.0",
-        "kartik-v/yii2-widget-switchinput": "dev-master"
+        "kartik-v/yii2-widget-switchinput": "dev-master",
+        "kartik-v/yii2-widget-spinner": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

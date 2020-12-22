@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b226955c365d9df1ed733607b8b21fc5",
+    "content-hash": "d5cfc4c1c1901d25836c850b98e4fec5",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -1851,21 +1851,22 @@
         },
         {
             "name": "kartik-v/yii2-widget-spinner",
-            "version": "v1.0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-spinner.git",
-                "reference": "eb10dad17a107bf14f173c99994770ca23c548a6"
+                "reference": "db22bd63fd1c1d3f9d8aa9477842f16338050ff1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-spinner/zipball/eb10dad17a107bf14f173c99994770ca23c548a6",
-                "reference": "eb10dad17a107bf14f173c99994770ca23c548a6",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-spinner/zipball/db22bd63fd1c1d3f9d8aa9477842f16338050ff1",
+                "reference": "db22bd63fd1c1d3f9d8aa9477842f16338050ff1",
                 "shasum": ""
             },
             "require": {
                 "kartik-v/yii2-krajee-base": ">=2.0.0"
             },
+            "default-branch": true,
             "type": "yii2-extension",
             "extra": {
                 "branch-alias": {
@@ -1904,7 +1905,7 @@
                 "issues": "https://github.com/kartik-v/yii2-widget-spinner/issues",
                 "source": "https://github.com/kartik-v/yii2-widget-spinner/tree/master"
             },
-            "time": "2018-10-09T11:54:03+00:00"
+            "time": "2019-05-25T07:33:33+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-switchinput",
@@ -7693,7 +7694,8 @@
         "kartik-v/yii2-dialog": 20,
         "loveorigami/yii2-modal-ajax": 20,
         "kartik-v/yii2-money": 20,
-        "kartik-v/yii2-widget-switchinput": 20
+        "kartik-v/yii2-widget-switchinput": 20,
+        "kartik-v/yii2-widget-spinner": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

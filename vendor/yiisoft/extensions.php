@@ -75,15 +75,6 @@ return array (
       '@kartik/time' => $vendorDir . '/kartik-v/yii2-widget-timepicker/src',
     ),
   ),
-  'kartik-v/yii2-widget-spinner' => 
-  array (
-    'name' => 'kartik-v/yii2-widget-spinner',
-    'version' => '1.0.1.0',
-    'alias' => 
-    array (
-      '@kartik/spinner' => $vendorDir . '/kartik-v/yii2-widget-spinner/src',
-    ),
-  ),
   'kartik-v/yii2-widget-sidenav' => 
   array (
     'name' => 'kartik-v/yii2-widget-sidenav',
@@ -343,6 +334,15 @@ return array (
     'alias' => 
     array (
       '@kartik/switchinput' => $vendorDir . '/kartik-v/yii2-widget-switchinput',
+    ),
+  ),
+  'kartik-v/yii2-widget-spinner' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-spinner',
+    'version' => 'dev-master',
+    'alias' => 
+    array (
+      '@kartik/spinner' => $vendorDir . '/kartik-v/yii2-widget-spinner/src',
     ),
   ),
 );

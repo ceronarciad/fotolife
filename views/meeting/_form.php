@@ -5,7 +5,7 @@ use kartik\select2\Select2;
 use kartik\widgets\DatePicker;
 use kartik\widgets\TimePicker;
 use kartik\icons\Icon;
-use kartik\widgets\SwitchInput
+use kartik\spinner\Spinner;
 
 //use yii\widgets\ActiveForm;
 
@@ -20,6 +20,14 @@ use kartik\widgets\SwitchInput
         resize: none;
     }
 
+    .spinner{
+        position: absolute;
+        width: 0px;
+        z-index: 2000000000;
+        left: 50%;
+        top: 500% !important;
+    }
+
 </style>
 
 <div class="panel panel-default">
@@ -27,14 +35,14 @@ use kartik\widgets\SwitchInput
             <h2 class="panel-title">Nuevo evento</h2>
       </div>
       <div class="panel-body">
-        <?php 
-                use kartik\form\ActiveForm; // or kartik\widgets\ActiveForm
-                $form = ActiveForm::begin([
-                    'id' => 'login-form-vertical', 
-                    'type' => ActiveForm::TYPE_VERTICAL,
-                    'formConfig' => ['labelSpan' => 1, 'deviceSize' => ActiveForm::SIZE_MEDIUM]
-                ]); 
-            ?>
+                <?php 
+                    use kartik\form\ActiveForm; // or kartik\widgets\ActiveForm
+                    $form = ActiveForm::begin([
+                        'id' => 'login-form-vertical', 
+                        'type' => ActiveForm::TYPE_VERTICAL,
+                        'formConfig' => ['labelSpan' => 1, 'deviceSize' => ActiveForm::SIZE_MEDIUM]
+                    ]); 
+                ?>
                     <div class="row">
                         <div class="col-sm-9">
                             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
@@ -64,10 +72,12 @@ use kartik\widgets\SwitchInput
                             echo DatePicker::widget([
                                 'model' => $model, 
                                 'attribute' => 'start',
+                                'language' => 'es',
                                 'name' => 'start', 
                                 'value' => date('d-M-Y', strtotime('+2 days')),
                                 'options' => ['placeholder' => 'Elegir fecha ...'],
                                 'pluginOptions' => [
+                                    'orientation' => 'bottom left',
                                     'format' => 'yyyy-mm-dd',
                                     'todayHighlight' => true
                                 ]
@@ -110,14 +120,19 @@ use kartik\widgets\SwitchInput
                                     </span>
                                 </div>
 
-                            <?php //echo $form->field($model, 'location')->hiddenInput()->label(false); ?>
-                            <?php //echo $form->field($model, 'latitude')->hiddenInput()->label(false); ?>
-                            <?php //echo $form->field($model, 'longitude')->hiddenInput()->label(false);?>
+                            <?php echo $form->field($model, 'location')->hiddenInput()->label(false); ?>
+                            <?php echo $form->field($model, 'latitude')->hiddenInput()->label(false); ?>
+                            <?php echo $form->field($model, 'longitude')->hiddenInput()->label(false);?>
                                                        
                             <select name="meeting-places" id="meeting-places">
                                 <option value="0" selected="selected">Seleccionar un lugar</option>
                             </select>
-                            <br>
+                            <?php
+                                echo '<div class="border border-secondary p-3 rounded" id="spinner">';
+                                echo Spinner::widget(['preset' => 'large', 'align' => 'center']);
+                                echo '<div class="clearfix"></div>';
+                                echo '</div>';
+                            ?>
                             <div style="width: auto; height: 180px; border-style: dotted;" id="mapContainer"></div>
                         </div>
                     </div>
@@ -154,6 +169,7 @@ use kartik\widgets\SwitchInput
                                                     'model' => $modelcustomer, 
                                                     'attribute' => 'birthday',
                                                     'name' => 'birthday', 
+                                                    'language' => 'es',
                                                     'value' => date('d-M-Y', strtotime('-20 years')),
                                                     'options' => ['placeholder' => 'Elegir fecha ...'],
                                                     'pluginOptions' => [
@@ -175,19 +191,19 @@ use kartik\widgets\SwitchInput
                                     <div id="collapse2" class="panel-collapse collapse">
                                         <div class="panel-body">
                                         <?php
-                                                echo '<label class="control-label">Clientes</label>';
-                                                echo Select2::widget([
-                                                    'model' => $modelcustomer,
-                                                    'attribute' => 'id',
-                                                    'data' => $datacustomer,
-                                                    'options' => [
-                                                        'placeholder' => 'Elegir una opción...',
-                                                        'class' => 'form-control',
-                                                    ],
-                                                    'pluginOptions' => [
-                                                        'allowClear' => true,
-                                                    ],
-                                                ]);
+                                            echo '<label class="control-label">Clientes</label>';
+                                            echo Select2::widget([
+                                                'model' => $modelcustomer,
+                                                'attribute' => 'id',
+                                                'data' => $datacustomer,
+                                                'options' => [
+                                                    'placeholder' => 'Elegir una opción...',
+                                                    'class' => 'form-control',
+                                                ],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ]);
                                         ?>
                                         </div>
                                     </div>
@@ -261,6 +277,7 @@ use kartik\widgets\SwitchInput
                         var str = $("#meeting-id_service").val();
 
                         $("#button-save").hide();
+                        $("#spinner").hide();
 
                         $("input").change(function(e){
                             validation();
@@ -343,6 +360,7 @@ use kartik\widgets\SwitchInput
 
                     function findLocation() {
                             var str = $("#meeting-location-text").val();
+                            $("#spinner").show();
 
                             if(str.length >= 10){
                                 $.ajax({
@@ -354,9 +372,9 @@ use kartik\widgets\SwitchInput
                                         var m = str.length;
                                         var jsonString = str.substring(n-2, m); 
                                         responseJson = $.parseJSON(jsonString);
-                                        console.log(responseJson);
                                         var countPosition = responseJson.Response.View[0].Result.length;
                                         var myCount = 0;
+                                        document.getElementById("mapContainer").innerHTML = '';
 
                                         if(countPosition > 0){
                                             $("#meeting-places").show();
@@ -367,22 +385,32 @@ use kartik\widgets\SwitchInput
                                                 $('#meeting-places').append(`<option value="${myCount}" onclick="choosePlace(${myCount})">${label}</option>`);
                                                 myCount = myCount + 1;
                                             });
+
+                                            $("#spinner").hide();
                                             
                                         }else{
                                             $("#meeting-places").hide();
+                                            $("#spinner").hide();
                                         }
 
                                     },
                                     error: function (exception) {
                                         console.log(exception);
+                                    $("#spinner").hide();
                                     }
                                 });
                             }else{
                                 $("#meeting-places").hide();
+                                $("#spinner").hide();
                             }
                     }
 
                     function choosePlace(position){
+
+                            document.getElementById("mapContainer").innerHTML = '';
+
+                            // var spinner = document.getElementById("spinner");
+                            // spinner.style.display = 'block';
 
                             var latitude = responseJson.Response.View[0].Result[0].Location.DisplayPosition.Latitude;
                             var longitude = responseJson.Response.View[0].Result[0].Location.DisplayPosition.Longitude;

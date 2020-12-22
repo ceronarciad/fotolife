@@ -10,7 +10,7 @@ body {
     padding: 0 0 60px;
 }
 
-.wrap > .container {
+.wrap>.container {
     padding: 70px 15px 20px;
 }
 
@@ -36,8 +36,11 @@ body {
     font-style: italic;
 }
 
+
 /* add sorting icons to gridview sort links */
-a.asc:after, a.desc:after {
+
+a.asc:after,
+a.desc:after {
     position: relative;
     top: 1px;
     display: inline-block;
@@ -49,11 +52,13 @@ a.asc:after, a.desc:after {
 }
 
 a.asc:after {
-    content: /*"\e113"*/ "\e151";
+    content: /*"\e113"*/
+    "\e151";
 }
 
 a.desc:after {
-    content: /*"\e114"*/ "\e152";
+    content: /*"\e114"*/
+    "\e152";
 }
 
 .sort-numerical a.asc:after {
@@ -90,26 +95,158 @@ a.desc:after {
     margin: 0 0 15px 0;
 }
 
+
 /* align the logout "link" (button in form) of the navbar */
-.nav li > form > button.logout {
+
+.nav li>form>button.logout {
     padding: 15px;
     border: none;
 }
 
 @media(max-width:767px) {
-    .nav li > form > button.logout {
-        display:block;
+    .nav li>form>button.logout {
+        display: block;
         text-align: left;
         width: 100%;
         padding: 10px 15px;
     }
 }
 
-.nav > li > form > button.logout:focus,
-.nav > li > form > button.logout:hover {
+.nav>li>form>button.logout:focus,
+.nav>li>form>button.logout:hover {
     text-decoration: none;
 }
 
-.nav > li > form > button.logout:focus {
+.nav>li>form>button.logout:focus {
     outline: none;
+}
+
+.btn-success {
+    background-image: linear-gradient(to right, #02AAB0 0%, #00CDAC 51%, #02AAB0 100%) !important;
+}
+
+.btn-success {
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.3s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    display: block;
+    border-color: #fff;
+    font-weight: bold;
+}
+
+.btn-success:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+.btn-success:click {
+    background-position: left center;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+.btn-primary {
+    background-image: linear-gradient(to right, #fd746c 0%, #ff9068 51%, #fd746c 100%) !important;
+}
+
+.btn-primary {
+    text-transform: uppercase;
+    transition: 0.3s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-color: #fff;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+.btn-primary:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+.btn-primary:click {
+    background-position: left center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+.btn-secondary {
+    background-image: linear-gradient(to right, #ECE9E6 0%, #FFFFFF 51%, #ECE9E6 100%);
+}
+
+.btn-secondary {
+    text-transform: uppercase;
+    transition: 0.3s;
+    background-size: 200% auto;
+    color: #383636;
+    box-shadow: 0 0 20px #eee;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+.btn-secondary:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+.btn-secondary:click {
+    background-position: left center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+.btn-warning {
+    background-color: #FBAB7E;
+    background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+}
+
+.btn-warning {
+    text-transform: uppercase;
+    transition: 0.3s;
+    background-size: 200% auto;
+    color: #fff;
+    box-shadow: 0 0 20px #eee;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+.btn-warning:hover {
+    background-position: right center;
+    /* change the direction of the change here */
+    color: #fffs;
+    text-decoration: none;
+    font-weight: bold;
+    border-color: #fff;
+}
+
+.btn-warning:click {
+    background-position: left center;
+    /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-color: #fff;
 }

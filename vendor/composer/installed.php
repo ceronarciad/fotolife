@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '0e0e65c6bf3686ede710c4c7e3d942565076903b',
+    'reference' => 'd3b4913bf7e157c348790422bbc27fbd805aba5f',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -494,12 +494,13 @@
     ),
     'kartik-v/yii2-widget-spinner' => 
     array (
-      'pretty_version' => 'v1.0.1',
-      'version' => '1.0.1.0',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
+        0 => '1.0.x-dev',
       ),
-      'reference' => 'eb10dad17a107bf14f173c99994770ca23c548a6',
+      'reference' => 'db22bd63fd1c1d3f9d8aa9477842f16338050ff1',
     ),
     'kartik-v/yii2-widget-switchinput' => 
     array (
@@ -1191,7 +1192,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '0e0e65c6bf3686ede710c4c7e3d942565076903b',
+      'reference' => 'd3b4913bf7e157c348790422bbc27fbd805aba5f',
     ),
     'yiisoft/yii2-bootstrap' => 
     array (
