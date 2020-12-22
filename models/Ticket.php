@@ -11,9 +11,11 @@ use Yii;
  * @property float $total
  * @property string $date_ticket
  * @property int|null $id_meeting
+ * @property int $id_customer
  *
  * @property Payment[] $payments
  * @property Meeting $meeting
+ * @property Customer $customer
  * @property TicketDetail[] $ticketDetails
  */
 class Ticket extends \yii\db\ActiveRecord
@@ -37,8 +39,9 @@ class Ticket extends \yii\db\ActiveRecord
             [['total', 'date_ticket','product_list'], 'required'],
             [['total'], 'number'],
             [['date_ticket', 'product_list'], 'safe'],
-            [['id_meeting'], 'integer'],
+            [['id_meeting', 'id_customer'],'integer'],
             ['id_meeting', 'default', 'value' => null],
+            [['id_customer'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['id_customer' => 'id']],
             [['id_meeting'], 'exist',  'skipOnError' => true, 'targetClass' => Meeting::className(), 'targetAttribute' => ['id_meeting' => 'id']],
         ];
     }
@@ -53,6 +56,7 @@ class Ticket extends \yii\db\ActiveRecord
             'total' => Yii::t('app', 'Total'),
             'date_ticket' => Yii::t('app', 'Date Ticket'),
             'id_meeting' => Yii::t('app', 'Id Meeting'),
+            'id_customer' => Yii::t('app', 'ClienteID'),
             'product_list' => Yii::t('app', 'Lista de productos'),
         ];
     }
@@ -67,15 +71,15 @@ class Ticket extends \yii\db\ActiveRecord
         return $this->hasMany(Payment::className(), ['id_ticket' => 'id']);
     }
 
-    // /**
-    //  * Gets query for [[Meeting]].
-    //  *
-    //  * @return \yii\db\ActiveQuery|MeetingQuery
-    //  */
-    // public function getMeeting()
-    // {
-    //     return $this->hasOne(Meeting::className(), ['id' => 'id_meeting']);
-    // }
+    /**
+     * Gets query for [[Meeting]].
+     *
+     * @return \yii\db\ActiveQuery|MeetingQuery
+     */
+    public function getMeeting()
+    {
+        return $this->hasOne(Meeting::className(), ['id' => 'id_meeting']);
+    }
 
     /**
      * Gets query for [[TicketDetails]].
@@ -95,4 +99,5 @@ class Ticket extends \yii\db\ActiveRecord
     {
         return new TicketQuery(get_called_class());
     }
+
 }

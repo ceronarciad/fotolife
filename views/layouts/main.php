@@ -129,6 +129,8 @@ AppAsset::register($this);
                          '<li class="divider"></li>',
                          ['label' => 'Productos', 'url' => '/product/index'],
                          '<li class="divider"></li>',
+                         ['label' => 'Clientes', 'url' => '/customer/index'],
+                         '<li class="divider"></li>',
                          //'<li class="dropdown-header">Dropdown Header</li>',
                     ],
                 ]

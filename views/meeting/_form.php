@@ -5,6 +5,7 @@ use kartik\select2\Select2;
 use kartik\widgets\DatePicker;
 use kartik\widgets\TimePicker;
 use kartik\icons\Icon;
+use kartik\widgets\SwitchInput
 
 //use yii\widgets\ActiveForm;
 
@@ -14,9 +15,6 @@ use kartik\icons\Icon;
 ?>
 
 <style>
-    #meeting-places{
-        width:540px;   
-    }
     
     textarea {
         resize: none;
@@ -57,11 +55,9 @@ use kartik\icons\Icon;
                                 ?>
                         </div>
                     </div>
+                    
 
                     <div class="row">
-                        <div class="col-sm-6">
-                            <?= $form->field($model, 'description')->textarea(['rows' => 9]) ?> 
-                            <div class="row">
                         <div class="col-sm-6">
                             <?php
                             echo '<label class="control-label has-star" for="meeting-start">Fecha</label>';
@@ -94,48 +90,110 @@ use kartik\icons\Icon;
                             ?>
                         </div>
                     </div>
-                    
+
+                    <br>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <?= $form->field($model, 'description')->textarea(['rows' => 9]) ?> 
                         </div>
-                        <div class="col-sm-6">
+                    </div>
+     
+                    <div class="row">    
+                        <div class="col-sm-12">
                             <?php echo '<label class="control-label">Ubicación</label><br>'; ?>
             
                                 <div class="input-group">
-                                <input type="text" class="form-control" autocomplete="off" name="meeting-location-text" id="meeting-location-text" placeholder="Escribe un lugar...">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" onclick="findLocation()">Buscar!</button>
-                                </span>
+                                    <input type="text" class="form-control" autocomplete="off" name="meeting-location-text" id="meeting-location-text" placeholder="Escribe un lugar...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" onclick="findLocation()">Buscar!</button>
+                                    </span>
                                 </div>
-                            <br>
-                            <?php echo $form->field($model, 'location')->hiddenInput()->label(false); ?>
-                            <?php echo $form->field($model, 'latitude')->hiddenInput()->label(false); ?>
-                            <?php echo $form->field($model, 'longitude')->hiddenInput()->label(false);?>
+
+                            <?php //echo $form->field($model, 'location')->hiddenInput()->label(false); ?>
+                            <?php //echo $form->field($model, 'latitude')->hiddenInput()->label(false); ?>
+                            <?php //echo $form->field($model, 'longitude')->hiddenInput()->label(false);?>
+                                                       
                             <select name="meeting-places" id="meeting-places">
-                                <option value="0" selected="selected">Seleccionar opción</option>
+                                <option value="0" selected="selected">Seleccionar un lugar</option>
                             </select>
                             <br>
-
-                            <br>
-                            <div style="width: 540px; height: 180px" id="mapContainer"></div>
+                            <div style="width: auto; height: 180px; border-style: dotted;" id="mapContainer"></div>
                         </div>
                     </div>
-
                     <br>
 
                     <div class="row">
                         <div class="col-sm-6">
                             <p class="h4">Datos de cliente</p>
                             <br>
-                            <?= $form->field($modelcustomer, 'name')->textInput(['maxlength' => true]) ?>
-                            <?php
-                                echo $form->field($modelcustomer, 'phone', [
-                                    'addon' => ['prepend' => ['content'=>'<i class="fas fa-mobile-alt"></i>']]
-                                ]);
-                            ?>
-                            <?php
-                                echo $form->field($modelcustomer, 'email', [
-                                    'addon' => ['prepend' => ['content'=>'@']]
-                                ]);
-                            ?>
+                                <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                                        Nuevo cliente</a>
+                                    </div>
+                                    <div id="collapse1" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <?= $form->field($modelcustomer, 'name')->textInput(['maxlength' => true]) ?>
+                                            <?php
+                                                echo $form->field($modelcustomer, 'phone', [
+                                                    'addon' => ['prepend' => ['content'=>'<i class="fas fa-mobile-alt"></i>']]
+                                                ]);
+                                            ?>
+                                            <?php
+                                                echo $form->field($modelcustomer, 'email', [
+                                                    'addon' => ['prepend' => ['content'=>'@']]
+                                                ]);
+                                            ?>
+
+                                            <?php
+                                                echo '<label class="control-label has-star" for="meeting-start">Fecha de nacimiento</label>';
+                                                echo DatePicker::widget([
+                                                    'model' => $modelcustomer, 
+                                                    'attribute' => 'birthday',
+                                                    'name' => 'birthday', 
+                                                    'value' => date('d-M-Y', strtotime('-20 years')),
+                                                    'options' => ['placeholder' => 'Elegir fecha ...'],
+                                                    'pluginOptions' => [
+                                                        'format' => 'yyyy-mm-dd',
+                                                        'todayHighlight' => true
+                                                    ]
+                                                ]);
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                                        Cliente registrado</a>
+                                    </h4>
+                                    </div>
+                                    <div id="collapse2" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                        <?php
+                                                echo '<label class="control-label">Clientes</label>';
+                                                echo Select2::widget([
+                                                    'model' => $modelcustomer,
+                                                    'attribute' => 'id',
+                                                    'data' => $datacustomer,
+                                                    'options' => [
+                                                        'placeholder' => 'Elegir una opción...',
+                                                        'class' => 'form-control',
+                                                    ],
+                                                    'pluginOptions' => [
+                                                        'allowClear' => true,
+                                                    ],
+                                                ]);
+                                        ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div> 
+                            <br>
                         </div>
                         <div class="col-sm-6">
                             <p class="h4">Datos de servicio</p>
@@ -190,10 +248,9 @@ use kartik\icons\Icon;
                         </div>
                     </div>
                     
-
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <?= Html::submitButton('Guardar', ['class' => 'btn btn-success mr-1']) ?>
+                            <?= Html::submitButton('Guardar', ['id' => 'button-save','class' => 'btn btn-success mr-1']) ?>
                             <?= Html::resetButton('Limpiar', ['class' => 'btn btn-secondary']) ?>
                         </div>
                     </div>
@@ -201,9 +258,68 @@ use kartik\icons\Icon;
             <script>
                     $(document).ready(function () {
                         var responseJson = null;
-                        var str = $("#meeting-").val();
                         var str = $("#meeting-id_service").val();
 
+                        $("#button-save").hide();
+
+                        $("input").change(function(e){
+                            validation();
+                        }); 
+
+                        $('#meeting-status').on('select2:select', function (e) {
+                            validation();
+                        });
+
+                        $('#meeting-id_service').on('select2:select', function (e) {
+                            validation();
+                        });
+            
+                        $('#customer-id').on('select2:select', function (e) {
+                            validation();
+                            $("#customer-name").val('');
+                            $("#customer-phone").val('');
+                            $("#customer-email").val('');
+                        });
+
+                        $('#meeting-status').on('select2:clear', function (e) {
+                            validation();
+                        });
+
+                        $('#meeting-id_service').on('select2:clear', function (e) {
+                            validation();
+
+                        });
+            
+                        $('#customer-id').on('select2:clear', function (e) {
+                            validation();
+                        });
+            
+                        
+                        function validation(){
+                            var meeting_title = $("#meeting-title").val();
+                            var meeting_start = $("#meeting-start").val();
+                            var meeting_description = $("#meeting-description").val();
+                            var meeting_time_init = $("#meeting-time_init").val();
+                            var meeting_location_text = $("#meeting-location-text").val();
+                            var customer_name = $("#customer-name").val();
+                            var customer_phone = $("#customer-phone").val();
+                            var customer_email = $("#customer-email").val();
+                            var meeting_id_service = (parseInt($("#meeting-id_service").val()) > 0) ? parseInt($("#meeting-id_service").val()): 0;
+                            var meeting_status = (parseInt($("#meeting-status").val()) > 0) ? parseInt($("#meeting-status").val()) : 0;
+                            var customer_id = (parseInt($("#customer-id").val()) > 0) ? parseInt($("#customer-id").val()) : 0;
+
+                            if (meeting_title.length > 0 && meeting_start.length > 0 && meeting_time_init.length > 0 && meeting_location_text.length > 0 && customer_name.length > 0 && customer_phone.length > 0 && customer_email.length > 0 && meeting_id_service > 0 && meeting_status > 0) {
+                                $("#button-save").show();
+                            }else{
+                                if (customer_id > 0 && meeting_title.length > 0 && meeting_start.length > 0 && meeting_time_init.length > 0 && meeting_location_text.length > 0 && meeting_id_service > 0 && meeting_status > 0) {
+                                    $("#button-save").show();
+                                }else{
+                                    $("#button-save").hide();
+                                }
+                            }
+                            
+                        }
+                        
                         $("#meeting-places").hide();
                         $('#meeting-id_service').on('select2:select', function (e) {
                             var str = e.params.data.id;

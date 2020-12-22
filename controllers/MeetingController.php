@@ -77,6 +77,9 @@ class MeetingController extends Controller
         $model = $this->findModel($id);
         $modelcustomer = Customer::findOne($model->id_customer);
         $ticket = Ticket::find()->where(['id_meeting' => $model->id])->one();
+        //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        //return $ticket;
+
         $ticketDetails = TicketDetail::find()->where(['id_ticket' => $ticket->id])->all();
         $payments = Payment::find()->where(['id_ticket' => $ticket->id])->all();
         $service = Service::find()->where(['id' => $model->id_service])->one();
@@ -143,6 +146,7 @@ class MeetingController extends Controller
         $modelcustomer = new Customer();
         $modelticketdetails = new TicketDetail();
         $listData=ArrayHelper::map(Service::find()->select(['id','title'])->all(),'id','title');
+        $listDataCustomer=ArrayHelper::map(Customer::find()->select(['id','name'])->all(),'id','name');
         
         $transaction = Yii::$app->db->beginTransaction();
         if ($model->load(Yii::$app->request->post()) && $modelcustomer->load(Yii::$app->request->post())) {
@@ -155,7 +159,7 @@ class MeetingController extends Controller
                         $modelticket->total = $serviceData->price;
                         $modelticket->date_ticket = date("Y-m-d");
                         $modelticket->id_meeting = $model->id;
-                        $modelticket->save();
+                        $modelticket->save(false);
 
                         $modelticketdetails->amount = $serviceData->price;
                         $modelticketdetails->date_ticket = date("Y-m-d");
@@ -180,12 +184,14 @@ class MeetingController extends Controller
                 'model' => $model,
                 'modelcustomer' => $modelcustomer,
                 'dataservice' => $listData,
+                'datacustomer' => $listDataCustomer
             ]);
         } else {
             return $this->render('create', [
                 'model' => $model,
                 'modelcustomer' => $modelcustomer,
                 'dataservice' => $listData,
+                'datacustomer' => $listDataCustomer
             ]);
         }
 

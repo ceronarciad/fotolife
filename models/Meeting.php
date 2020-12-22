@@ -15,12 +15,10 @@ use Yii;
  * @property int $status
  * @property int $user_id_log
  * @property string|null $location
- * @property int $id_customer
  * @property int $id_service
  * @property string $latitude
  * @property string $longitude
  *
- * @property Customer $customer
  * @property Service $service
  */
 class Meeting extends \yii\db\ActiveRecord
@@ -39,12 +37,11 @@ class Meeting extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description', 'start', 'time_init', 'id_customer', 'id_service'], 'required', 'message'=>'Favor de completar el campo {attribute}.'],
+            [['description', 'start', 'time_init', 'id_service'], 'required', 'message'=>'Favor de completar el campo {attribute}.'],
             [['description', 'location'], 'string'],
             [['start', 'time_init'], 'safe'],
-            [['status', 'user_id_log', 'id_customer', 'id_service'], 'integer'],
+            [['status', 'user_id_log', 'id_service'], 'integer'],
             [['title', 'latitude', 'longitude'], 'string', 'max' => 100],
-            [['id_customer'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['id_customer' => 'id']],
             [['id_service'], 'exist', 'skipOnError' => true, 'targetClass' => Service::className(), 'targetAttribute' => ['id_service' => 'id']],
         ];
     }
@@ -63,21 +60,10 @@ class Meeting extends \yii\db\ActiveRecord
             'status' => Yii::t('app', 'Estatus'),
             'user_id_log' => Yii::t('app', 'User Id Log'),
             'location' => Yii::t('app', 'Ubicación'),
-            'id_customer' => Yii::t('app', 'ClienteID'),
             'id_service' => Yii::t('app', 'ServicioID'),
             'latitude' => 'Latitud',
             'longitude' => 'Longitud',
         ];
-    }
-
-    /**
-     * Gets query for [[Customer]].
-     *
-     * @return \yii\db\ActiveQuery|CustomerQuery
-     */
-    public function getCustomer()
-    {
-        return $this->hasOne(Customer::className(), ['id' => 'id_customer']);
     }
 
     /**

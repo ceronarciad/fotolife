@@ -3,18 +3,24 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Customer */
+/* @var $model app\models\Service */
 
-$this->title = Yii::t('app', 'Create Customer');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Customers'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Yii::t('app', 'Crear cliente');
 ?>
-<div class="customer-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="service-create">
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
-
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <h2 class="panel-title">
+                    <?= Html::encode($this->title) ?>
+                </h2>
+        </div>
+        <div class="panel-body">
+            <?= $this->render('_form', [
+                'model' => $model,
+            ]) ?>
+        </div>
+    </div>
+    
 </div>

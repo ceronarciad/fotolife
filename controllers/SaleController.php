@@ -12,6 +12,7 @@ use app\models\TicketDetail;
 use app\models\Product;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
+use kartik\mpdf\Pdf;
 
 /**
  * CustomerController implements the CRUD actions for Customer payment.
@@ -101,7 +102,7 @@ class SaleController extends Controller
         return $this->render('view', [
             'ticket' => $ticket,
             'ticketDetails' => $ticketDetails,
-            'payments' => $payments,            
+            'payments' => $payments,
             'char' => $char,
             'payment_summary' => $payment_summary,
             'totalAmount' => $totalAmount,
@@ -232,6 +233,146 @@ class SaleController extends Controller
 
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $product;
+    }
+
+    public function actionTicket($id) {
+        $ticket = Ticket::findOne($id);
+        $query = new \yii\db\Query();
+        $query->from(['d' => 'ticket_detail'])
+        ->select(['COUNT(*) AS count','p.name', 'd.amount', 'SUM(d.amount) as total'])
+        ->innerJoin(['p'=>'products'],'d.id_product = p.id')
+        ->andWhere(['d.id_ticket' => $ticket->id])
+        ->groupBy(['p.name', 'd.amount'])
+        ->all();
+        $ticketDetails = $query->all();
+
+        //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        //return $ticketDetails;
+        $payments = Payment::find()->where(['id_ticket' => $ticket->id])->all();
+        $total_payments = 0;
+        foreach ($payments as $key => $value) {
+            $total_payments = $total_payments + (int)$value->amount;
+        }
+
+        if($total_payments == $ticket->total){
+            $paidOut = "Completa";
+        }else{
+            $difference = $ticket->total - $total_payments;
+            $paidOut = "Parcial (Restante $" . $difference.")";
+        }
+
+        $diassemana = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        $date_ticket = $diassemana[date('w')]." ".date('d')." de ".$meses[date('n')-1]. " del ".date('Y') ;
+        $body = "<div class='container' >
+                    <div class='page-header'>
+                    <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                    <h1>&nbsp;&nbsp;&nbsp;<img src='https://i.ibb.co/tLFdjnk/logo.png' height='50'/>&nbsp;&nbsp; FotoLife <small>Recordar es volver a vivir</small>&nbsp;&nbsp;&nbsp; <img src='https://i.ibb.co/tLFdjnk/logo.png' height='50'/></h1>
+                    </div>
+                    </div>
+                    </div>
+                    <div class='container'>
+                        <div class='row'>
+                            <div class='col-xs-12'>
+                                <div class='text-center'>
+                                    <i class='fa fa-search-plus pull-left icon'></i>
+                                    <h2>Nota de compra #0000".$ticket->id."</h2>
+                                </div>
+                                <hr>
+                                <div class='row'>
+                                    <div class='col-xs-12'>
+                                        <div class='panel panel-default height'>
+                                            <div class='panel-heading'><strong>Datos del cliente</strong></div>
+                                            <div class='panel-body'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-md-12'>
+                                <div class='panel panel-default'>
+                                    <div class='panel-heading'><strong>Resumen de pago</strong>
+                                    </div>
+                                    <div class='panel-body'>
+                                        <div class='table-bordered'>
+                                        <table class='table table-condensed table-hover'>
+                                            <thead>
+                                                <tr>
+                                                    <th>Cantidad</th>
+                                                    <th>Producto</th>
+                                                    <th>Precio</th>
+                                                    <th>Subtotal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>";
+                                                foreach ($ticketDetails as $key => $value) {
+                                                    $body = $body.'<tr>';
+                                                    $counter = 0;
+                                                        foreach ($value as $item) {
+                                                            $counter ++;
+                                                            $body = $body. '<td>';
+                                                            $value = ($counter == 3 || $counter == 4) ? '$': '';
+                                                            $body = $body.$value;
+                                                            $body = $body. $item;
+                                                            $body = $body. '</td>';
+                                                        }
+                                                    $body = $body.'</tr>';
+                                                }
+                                            $body = $body. "</tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td><b>Total</b></td>
+                                                    <td>$ $ticket->total </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-xs-12'>
+                                <div class='panel panel-default height'>
+                                        <div class='panel-heading'><strong>Información de pago</strong></div>
+                                        <div class='panel-body'>
+                                            <strong>Tipo de pago:</strong> Efectivo<br>
+                                            <strong>Liquidación: </strong>".$paidOut ."<br>
+                                        </div>
+                                </div>
+                            </div>
+
+                            <br><br><br><br><br><br>
+                            <br><br><br><br><br>
+                            &nbsp;
+                            <br>
+                        </div>
+                    </div>
+        </div>";
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_CORE, // leaner size using standard fonts
+            'destination' => Pdf::DEST_BROWSER,
+            'content' => $body,
+            'format' => Pdf::FORMAT_A4, 
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/src/assets/kv-mpdf-bootstrap.min.css',
+            'options' => [
+            ],
+            'methods' => [
+                'SetTitle' => 'FotoLife',
+                'SetSubject' => 'Generado por DevProjects.com.mx',
+                'SetHeader' => ['FotoLife|| a ' . $date_ticket],
+                'SetFooter' => ['|Página {PAGENO}|'],
+                'SetAuthor' => 'Foto Life',
+                'SetCreator' => 'Foto Life',
+                'SetKeywords' => 'Ticker, FotoLife',
+            ]
+        ]);
+        return $pdf->render();
     }
 
 }

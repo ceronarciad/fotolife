@@ -12,6 +12,7 @@ use yii\helpers\Html;
         'model' => $model,
         'modelcustomer' => $modelcustomer,
         'dataservice' => $dataservice,
+        'datacustomer' => $datacustomer
     ]) ?>
 
 </div>

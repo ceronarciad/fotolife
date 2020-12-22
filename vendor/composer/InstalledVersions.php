@@ -1,15 +1,5 @@
 <?php
 
-
-
-
-
-
-
-
-
-
-
 namespace Composer;
 
 use Composer\Semver\VersionParser;
@@ -24,12 +14,12 @@ class InstalledVersions
 private static $installed = array (
   'root' => 
   array (
-    'pretty_version' => '1.0.0+no-version-set',
-    'version' => '1.0.0.0',
+    'pretty_version' => 'dev-main',
+    'version' => 'dev-main',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => '0e0e65c6bf3686ede710c4c7e3d942565076903b',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -526,12 +516,13 @@ private static $installed = array (
     ),
     'kartik-v/yii2-widget-switchinput' => 
     array (
-      'pretty_version' => 'v1.3.1',
-      'version' => '1.3.1.0',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
+        0 => '9999999-dev',
       ),
-      'reference' => '7d8ee999d79bcdc1601da5cd59439ac7eb1f5ea6',
+      'reference' => '10afe2ac8274da9371b43aaf69e99fc553f1b947',
     ),
     'kartik-v/yii2-widget-timepicker' => 
     array (
@@ -1208,12 +1199,12 @@ private static $installed = array (
     ),
     'yiisoft/yii2-app-basic' => 
     array (
-      'pretty_version' => '1.0.0+no-version-set',
-      'version' => '1.0.0.0',
+      'pretty_version' => 'dev-main',
+      'version' => 'dev-main',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => '0e0e65c6bf3686ede710c4c7e3d942565076903b',
     ),
     'yiisoft/yii2-bootstrap' => 
     array (
