@@ -18,7 +18,9 @@ $this->title = Yii::t('app', 'Crear venta');
         </div>
         <div class="panel-body">
             <?= $this->render('_form', [
-                'products' => $products
+                'products' => $products,
+                'modelcustomer' => $modelcustomer,
+                'datacustomer' => $datacustomer
             ]) ?>
         </div>
     </div>

@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string $name
+ * @property int $status
  * @property string|null $description
  * @property float $price
  */
@@ -29,7 +30,7 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'price'], 'required', 'message'=>'Favor de completar el campo {attribute}.'],
-            [['price'], 'number'],
+            [['status','price'], 'number'],
             [['name'], 'string', 'max' => 100],
             [['description'], 'string', 'max' => 500],
         ];
@@ -45,6 +46,7 @@ class Product extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'Nombre'),
             'description' => Yii::t('app', 'Descripcion'),
             'price' => Yii::t('app', 'Precio'),
+            'status' => Yii::t('app', 'Estatus'),
         ];
     }
 

@@ -63,6 +63,8 @@ class ProductSearch extends Product
             'price' => $this->price,
         ]);
 
+        $query->where('status>0');
+
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description]);
 

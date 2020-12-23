@@ -32,7 +32,7 @@ use kartik\spinner\Spinner;
 
 <div class="panel panel-default">
       <div class="panel-heading">
-            <h2 class="panel-title">Nuevo evento</h2>
+            <h2 class="panel-title"><?php echo $model->title; ?> </h2>
       </div>
       <div class="panel-body">
                 <?php 
@@ -49,7 +49,7 @@ use kartik\spinner\Spinner;
                             </div>
                             
                             <div class="col-sm-3">
-                                <?php
+                            <?php
                                     echo '<label class="control-label">Estatus</label>';
                                     echo Select2::widget([
                                         'model' => $model,
@@ -142,73 +142,22 @@ use kartik\spinner\Spinner;
                         <div class="col-sm-6">
                             <p class="h4">Datos de cliente</p>
                             <br>
-                                <div class="panel-group" id="accordion">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                                        Nuevo cliente</a>
-                                    </div>
-                                    <div id="collapse1" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                            <?= $form->field($modelcustomer, 'name')->textInput(['maxlength' => true]) ?>
-                                            <?php
-                                                echo $form->field($modelcustomer, 'phone', [
-                                                    'addon' => ['prepend' => ['content'=>'<i class="fas fa-mobile-alt"></i>']]
-                                                ]);
-                                            ?>
-                                            <?php
-                                                echo $form->field($modelcustomer, 'email', [
-                                                    'addon' => ['prepend' => ['content'=>'@']]
-                                                ]);
-                                            ?>
-
-                                            <?php
-                                                echo '<label class="control-label has-star" for="meeting-start">Fecha de nacimiento</label>';
-                                                echo DatePicker::widget([
-                                                    'model' => $modelcustomer, 
-                                                    'attribute' => 'birthday',
-                                                    'name' => 'birthday', 
-                                                    'language' => 'es',
-                                                    'value' => date('d-M-Y', strtotime('-20 years')),
-                                                    'options' => ['placeholder' => 'Elegir fecha ...'],
-                                                    'pluginOptions' => [
-                                                        'format' => 'yyyy-mm-dd',
-                                                        'todayHighlight' => true
-                                                    ]
-                                                ]);
-                                            ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-                                        Cliente registrado</a>
-                                    </h4>
-                                    </div>
-                                    <div id="collapse2" class="panel-collapse collapse">
-                                        <div class="panel-body">
-                                        <?php
-                                            echo '<label class="control-label">Clientes</label>';
-                                            echo Select2::widget([
-                                                'model' => $modelcustomer,
-                                                'attribute' => 'id',
-                                                'data' => $datacustomer,
-                                                'options' => [
-                                                    'placeholder' => 'Elegir una opción...',
-                                                    'class' => 'form-control',
-                                                ],
-                                                'pluginOptions' => [
-                                                    'allowClear' => true,
-                                                ],
-                                            ]);
-                                        ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                </div> 
+                                <?php
+                                    echo '<label class="control-label">Clientes</label>';
+                                    echo Select2::widget([
+                                        'model' => $modelcustomer,
+                                        'attribute' => 'id',
+                                        'data' => $datacustomer,
+                                        'options' => [
+                                            'placeholder' => 'Elegir una opción...',
+                                            'class' => 'form-control',
+                                            'disabled' => true
+                                        ],
+                                        'pluginOptions' => [
+                                            'allowClear' => true,
+                                        ],
+                                    ]);
+                                ?>
                             <br>
                         </div>
                         <div class="col-sm-6">
@@ -273,10 +222,15 @@ use kartik\spinner\Spinner;
 
             <script>
                     $(document).ready(function () {
-
+                        
                         var responseJson = null;
                         var str = $("#meeting-id_service").val();
 
+                        choosePlaceDefault();
+                        var locationDefault = "<?php echo $model->location; ?>"
+                        $("#meeting-location-text").attr("placeholder", locationDefault);
+                        //$( "#meeting-location-text").val(locationDefault);                    
+                        
                         $("#button-save").hide();
                         $("#spinner").hide();
 
@@ -319,22 +273,16 @@ use kartik\spinner\Spinner;
                             var meeting_description = $("#meeting-description").val();
                             var meeting_time_init = $("#meeting-time_init").val();
                             var meeting_location_text = $("#meeting-location-text").val();
-                            var customer_name = $("#customer-name").val();
-                            var customer_phone = $("#customer-phone").val();
-                            var customer_email = $("#customer-email").val();
                             var meeting_id_service = (parseInt($("#meeting-id_service").val()) > 0) ? parseInt($("#meeting-id_service").val()): 0;
                             var meeting_status = (parseInt($("#meeting-status").val()) > 0) ? parseInt($("#meeting-status").val()) : 0;
                             var customer_id = (parseInt($("#customer-id").val()) > 0) ? parseInt($("#customer-id").val()) : 0;
 
-                            if (meeting_title.length > 0 && meeting_start.length > 0 && meeting_time_init.length > 0 && meeting_location_text.length > 0 && customer_name.length > 0 && customer_phone.length > 0 && customer_email.length > 0 && meeting_id_service > 0 && meeting_status > 0) {
+                            if (customer_id > 0 && meeting_title.length > 0 && meeting_start.length > 0 && meeting_time_init.length > 0 && meeting_id_service > 0 && meeting_status > 0) {
                                 $("#button-save").show();
                             }else{
-                                if (customer_id > 0 && meeting_title.length > 0 && meeting_start.length > 0 && meeting_time_init.length > 0 && meeting_location_text.length > 0 && meeting_id_service > 0 && meeting_status > 0) {
-                                    $("#button-save").show();
-                                }else{
-                                    $("#button-save").hide();
-                                }
+                                $("#button-save").hide();
                             }
+                            
                             
                         }
                         
@@ -355,7 +303,7 @@ use kartik\spinner\Spinner;
                                         console.log(exception);
                                     }
                             });
-                        });
+                        });                      
 
                     });
 
@@ -410,9 +358,6 @@ use kartik\spinner\Spinner;
 
                             document.getElementById("mapContainer").innerHTML = '';
 
-                            // var spinner = document.getElementById("spinner");
-                            // spinner.style.display = 'block';
-
                             var latitude = responseJson.Response.View[0].Result[0].Location.DisplayPosition.Latitude;
                             var longitude = responseJson.Response.View[0].Result[0].Location.DisplayPosition.Longitude;
                             var address = responseJson.Response.View[0].Result[0].Location.Address.Label;
@@ -434,6 +379,29 @@ use kartik\spinner\Spinner;
                                 zoom: 15,
                                 center: { lat: latitude, lng: longitude}
                                 });
+                    }
+
+                    function choosePlaceDefault(){
+
+                        document.getElementById("mapContainer").innerHTML = '';
+
+                        var latitude = "<?php echo $model->latitude; ?>"
+                        var longitude = "<?php echo $model->longitude; ?>"
+                        var address = "<?php echo $model->location; ?>"
+
+                        var platform = new H.service.Platform({
+                        'apikey': 'POODzP5bCT1UlFq0aEvMHWAs1PX0QHE539FeGjkTs8k'
+                        });
+
+                        var defaultLayers = platform.createDefaultLayers();
+
+                        var map = new H.Map(
+                            document.getElementById('mapContainer'),
+                            defaultLayers.vector.normal.map,
+                            {
+                            zoom: 15,
+                            center: { lat: latitude, lng: longitude}
+                            });
                     }
             
             </script>

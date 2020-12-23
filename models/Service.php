@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "services".
  *
  * @property int $id
+ *  * @property int $status
  * @property string $title
  * @property string $description
  * @property float $price
@@ -31,7 +32,7 @@ class Service extends \yii\db\ActiveRecord
         return [
             [['title', 'description', 'price', 'working_time'], 'required', 'message'=>'Favor de completar el campo {attribute}.'],
             [['description'], 'string'],
-            [['price'], 'number'],
+            [['status','price'], 'number'],
             [['working_time'], 'safe'],
             [['title'], 'string', 'max' => 100],
         ];
@@ -48,6 +49,7 @@ class Service extends \yii\db\ActiveRecord
             'description' => Yii::t('app', 'Descripcion'),
             'price' => Yii::t('app', 'Precio'),
             'working_time' => Yii::t('app', 'Duración'),
+            'status' => Yii::t('app', 'Estatus'),
         ];
     }
 

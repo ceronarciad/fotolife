@@ -12,6 +12,7 @@ use Yii;
  * @property string $date_ticket
  * @property int|null $id_meeting
  * @property int $id_customer
+ * @property int $status
  *
  * @property Payment[] $payments
  * @property Meeting $meeting
@@ -37,10 +38,10 @@ class Ticket extends \yii\db\ActiveRecord
     {
         return [
             [['total', 'date_ticket','product_list'], 'required'],
-            [['total'], 'number'],
+            [['status','total'], 'number'],
             [['date_ticket', 'product_list'], 'safe'],
             [['id_meeting', 'id_customer'],'integer'],
-            ['id_meeting', 'default', 'value' => null],
+            //['id_meeting', 'default', 'value' => null],
             [['id_customer'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['id_customer' => 'id']],
             [['id_meeting'], 'exist',  'skipOnError' => true, 'targetClass' => Meeting::className(), 'targetAttribute' => ['id_meeting' => 'id']],
         ];
@@ -54,10 +55,11 @@ class Ticket extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'total' => Yii::t('app', 'Total'),
-            'date_ticket' => Yii::t('app', 'Date Ticket'),
+            'date_ticket' => Yii::t('app', 'Fecha de ticket'),
             'id_meeting' => Yii::t('app', 'Id Meeting'),
             'id_customer' => Yii::t('app', 'ClienteID'),
             'product_list' => Yii::t('app', 'Lista de productos'),
+            'status' => Yii::t('app', 'Estatus'),
         ];
     }
 

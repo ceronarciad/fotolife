@@ -4,12 +4,10 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Customer;
+use app\models\Ticket;
 
-/**
- * CustomerSearch represents the model behind the search form of `app\models\Customer`.
- */
-class CustomerSearch extends Customer
+
+class TicketSearch extends Ticket
 {
     /**
      * {@inheritdoc}
@@ -17,8 +15,9 @@ class CustomerSearch extends Customer
     public function rules()
     {
         return [
-            [['id','status'], 'integer'],
-            [['name', 'phone', 'email', 'birthday'], 'safe'],
+            [['id', 'id_customer', 'id_meeting'], 'integer'],
+            [['date_ticket'], 'safe'],
+            [['total'], 'number'],
         ];
     }
 
@@ -40,7 +39,7 @@ class CustomerSearch extends Customer
      */
     public function search($params)
     {
-        $query = Customer::find();
+        $query = Ticket::find();
 
         // add conditions that should always apply here
 
@@ -55,18 +54,18 @@ class CustomerSearch extends Customer
             // $query->where('0=1');
             return $dataProvider;
         }
-        
-        $query->where('status>0');
 
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'birthday' => $this->birthday,
+            'total' => $this->total,
+            'date_ticket' => $this->date_ticket,
+            'id_meetings' => $this->id_meeting,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'phone', $this->phone])
-            ->andFilterWhere(['like', 'email', $this->email]);
+        $query->andWhere(['is', 'id_meeting', new \yii\db\Expression('null')]);
+
+           // ->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
     }

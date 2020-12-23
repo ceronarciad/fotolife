@@ -61,6 +61,7 @@ class Meeting extends \yii\db\ActiveRecord
             'user_id_log' => Yii::t('app', 'User Id Log'),
             'location' => Yii::t('app', 'Ubicación'),
             'id_service' => Yii::t('app', 'ServicioID'),
+            'status' => Yii::t('app', 'Estatus'),
             'latitude' => 'Latitud',
             'longitude' => 'Longitud',
         ];

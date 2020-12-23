@@ -10,9 +10,11 @@ use app\models\Payment;
 use app\models\Ticket;
 use app\models\TicketDetail;
 use app\models\Product;
+use app\models\Customer;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
+use app\models\TicketSearch;
 
 /**
  * CustomerController implements the CRUD actions for Customer payment.
@@ -43,7 +45,12 @@ class SaleController extends Controller
      */
     public function actionIndex()
     {
+        $searchModel = new TicketSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -65,6 +72,10 @@ class SaleController extends Controller
         ->all();
 
         $ticketDetails = $query->all();
+
+        //Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $modelcustomer = Customer::findOne($ticket->id_customer);
 
         $payments = Payment::find()->where(['id_ticket' => $ticket->id])->all();
         $totalAmount = 0;
@@ -97,6 +108,10 @@ class SaleController extends Controller
             }
       
             $remaining_percentage = 100 - $total_payments * 100 / $total;
+
+            if($total_payments < $ticket->total){
+                array_push($char, ['PAGO PENDIENTE', $remaining_percentage]);
+            }
         }
 
         return $this->render('view', [
@@ -106,6 +121,7 @@ class SaleController extends Controller
             'char' => $char,
             'payment_summary' => $payment_summary,
             'totalAmount' => $totalAmount,
+            'modelcustomer' => $modelcustomer
         ]);
     }
 
@@ -114,13 +130,27 @@ class SaleController extends Controller
         $payment = new Payment();
         $ticket = new Ticket();
         $products = ArrayHelper::map(Product::find()->select(['id','name'])->all(),'id','name');
-        $request = Yii::$app->request->post();
         $transaction = Yii::$app->db->beginTransaction();
         $newdate = date("Y-m-d");
+        $modelcustomer = new Customer();
+        $datacustomer=ArrayHelper::map(Customer::find()->select(['id','name'])->all(),'id','name');
+        $request = Yii::$app->request->post();
+
+        //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        //return $request['Customer'];
 
         if ($request) {
             try  {
-                //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+                if($request['Customer']['id'] == 0){
+                    $modelcustomer->name = $request['Customer']['name'];
+                    $modelcustomer->phone = $request['Customer']['phone'];
+                    $modelcustomer->email = $request['Customer']['email'];
+                    $modelcustomer->birthday = $request['Customer']['birthday'];
+                    $modelcustomer->save();
+                }
+
+                $ticket->id_customer = ($modelcustomer->id > 0) ? $modelcustomer->id : $request['Customer']['id'];
                 $ticket->total = (float)$request['total'];
                 $ticket->date_ticket = $newdate;
                 if($ticket->total > 0){
@@ -220,10 +250,11 @@ class SaleController extends Controller
                 $transaction->rollBack();
             }
         }
-        //return 'webos ';
 
         return $this->render('create', [
             'products' => $products,
+            'modelcustomer' => $modelcustomer,
+            'datacustomer' => $datacustomer,
         ]);
     }
 
@@ -246,8 +277,12 @@ class SaleController extends Controller
         ->all();
         $ticketDetails = $query->all();
 
+        $modelcustomer = Customer::findOne($ticket->id_customer);
+
+
         //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        //return $ticketDetails;
+        //return $modelcustomer;
+
         $payments = Payment::find()->where(['id_ticket' => $ticket->id])->all();
         $total_payments = 0;
         foreach ($payments as $key => $value) {
@@ -259,6 +294,12 @@ class SaleController extends Controller
         }else{
             $difference = $ticket->total - $total_payments;
             $paidOut = "Parcial (Restante $" . $difference.")";
+        }
+
+        if($modelcustomer != null){
+            $customer = "<strong>".$modelcustomer->name."</strong><br>".$modelcustomer->email."<br>".$modelcustomer->phone."<br>";
+        }{
+            $customer = "Venta al mostrador";
         }
 
         $diassemana = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
@@ -284,8 +325,8 @@ class SaleController extends Controller
                                     <div class='col-xs-12'>
                                         <div class='panel panel-default height'>
                                             <div class='panel-heading'><strong>Datos del cliente</strong></div>
-                                            <div class='panel-body'>
-                                            </div>
+                                                <div class='panel-body'>". $customer.
+                                                "</div>
                                         </div>
                                     </div>
                                 </div>
@@ -375,4 +416,12 @@ class SaleController extends Controller
         return $pdf->render();
     }
 
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+        $model->status = -1;
+        $model->save();
+
+        return $this->redirect(['index']);
+    }
 }

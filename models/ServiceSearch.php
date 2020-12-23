@@ -64,6 +64,8 @@ class ServiceSearch extends Service
             'working_time' => $this->working_time,
         ]);
 
+        $query->where('status>0');
+
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'description', $this->description]);
 

@@ -206,9 +206,9 @@ class MeetingController extends Controller
     public function actionTicket($id) {
         
         $model = $this->findModel($id);
-        $modelcustomer = Customer::findOne($model->id_customer);
         $modelservice = Service::findOne($model->id_service);
         $ticket = Ticket::find()->where(['id_meeting' => $id])->one();
+        $modelcustomer = Customer::findOne($ticket->id_customer);
         $ticketDetails = TicketDetail::find()->where(['id_ticket' => $id])->one();
         $payments = Payment::find()->where(['id_ticket' => $ticket->id])->all();
         
@@ -405,13 +405,23 @@ class MeetingController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $ticket = Ticket::find()->where(['id_meeting' => $model->id])->one();
+        $customer = Customer::findOne($ticket->id_customer);
+        $ticketDetails = TicketDetail::find()->where(['id_ticket' => $ticket->id])->all();
+        $payments = Payment::find()->where(['id_ticket' => $ticket->id])->all();
+        $service = Service::find()->where(['id' => $model->id_service])->one();
+        $listData=ArrayHelper::map(Service::find()->select(['id','title'])->all(),'id','title');
+        $listDataCustomer=ArrayHelper::map(Customer::find()->select(['id','name'])->all(),'id','name');
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'modelcustomer' => $customer,
+            'dataservice' => $listData,
+            'datacustomer' => $listDataCustomer
         ]);
     }
 
@@ -446,4 +456,5 @@ class MeetingController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+    
 }

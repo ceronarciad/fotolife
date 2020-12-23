@@ -31,7 +31,7 @@ class Payment extends \yii\db\ActiveRecord
     {
         return [
             [['amount', 'date_payment', 'id_ticket'], 'required'],
-            [['amount'], 'number'],
+            [['status','amount'], 'number'],
             [['date_payment'], 'safe'],
             [['id_ticket'], 'integer'],
             //[['id_ticket'], 'exist', 'skipOnError' => true, 'targetClass' => Ticket::className(), 'targetAttribute' => ['id_ticket' => 'id']],
@@ -48,6 +48,7 @@ class Payment extends \yii\db\ActiveRecord
             'amount' => Yii::t('app', 'Monto'),
             'date_payment' => Yii::t('app', 'Date Payment'),
             'id_ticket' => Yii::t('app', 'Id Ticket'),
+            'status' => Yii::t('app', 'Estatus'),
         ];
     }
 

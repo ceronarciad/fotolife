@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "customer".
  *
  * @property int $id
+ * @property int $STATUS
  * @property string $name
  * @property string $phone
  * @property string $email
@@ -29,7 +30,7 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'phone', 'email'], 'required','message'=>'Favor de completar el campo {attribute}.'],
+            //[['name', 'phone', 'email'], 'required','message'=>'Favor de completar el campo {attribute}.'],
             [['birthday'], 'safe'],
             [['name', 'email'], 'string', 'max' => 100],
             [['phone'], 'string', 'max' => 10],
@@ -43,6 +44,7 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'status' => Yii::t('app', 'Estatus'),
             'name' => Yii::t('app', 'Nombre'),
             'phone' => Yii::t('app', 'Teléfono'),
             'email' => Yii::t('app', 'Correo electrónico'),

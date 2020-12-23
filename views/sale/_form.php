@@ -1,9 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-
 use kartik\select2\Select2;
+use kartik\widgets\DatePicker;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
 /* @var $form yii\widgets\ActiveForm */
@@ -21,9 +21,14 @@ use kartik\select2\Select2;
         vertical-align:middle;
     }
 </style>
-
-
-    <?php $form = ActiveForm::begin(); ?>
+    <?php 
+        use kartik\form\ActiveForm; // or kartik\widgets\ActiveForm
+        $form = ActiveForm::begin([
+            'id' => 'login-form-vertical', 
+            'type' => ActiveForm::TYPE_VERTICAL,
+            'formConfig' => ['labelSpan' => 1, 'deviceSize' => ActiveForm::SIZE_MEDIUM]
+        ]); 
+    ?>
 
     <h4 class="text-primary">Agrege los articulos que desea incluir en la compra</h4>
     <br>
@@ -114,9 +119,87 @@ use kartik\select2\Select2;
                         
                   </div>
             </div>
-            
+
+            <div class="row">
+                        <div class="col-sm-8">
+                            <p class="h4">Datos de cliente <span class="text-primary"> En caso de querer asingar un cliente continue con el formulario</span></p>
+                            <br>
+                                <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
+                                        Nuevo cliente</a>
+                                    </div>
+                                    <div id="collapse1" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <?= $form->field($modelcustomer, 'name')->textInput(['maxlength' => true]) ?>
+                                            <?php
+                                                echo $form->field($modelcustomer, 'phone', [
+                                                    'addon' => ['prepend' => ['content'=>'<i class="fas fa-mobile-alt"></i>']]
+                                                ]);
+                                            ?>
+                                            <?php
+                                                echo $form->field($modelcustomer, 'email', [
+                                                    'addon' => ['prepend' => ['content'=>'@']]
+                                                ]);
+                                            ?>
+
+                                            <?php
+                                                echo '<label class="control-label has-star" for="meeting-start">Fecha de nacimiento</label>';
+                                                echo DatePicker::widget([
+                                                    'model' => $modelcustomer, 
+                                                    'attribute' => 'birthday',
+                                                    'name' => 'birthday', 
+                                                    'language' => 'es',
+                                                    'value' => date('d-M-Y', strtotime('-20 years')),
+                                                    'options' => ['placeholder' => 'Elegir fecha ...'],
+                                                    'pluginOptions' => [
+                                                        'format' => 'yyyy-mm-dd',
+                                                        'todayHighlight' => true
+                                                    ]
+                                                ]);
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                                        Cliente registrado</a>
+                                    </h4>
+                                    </div>
+                                    <div id="collapse2" class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                        <?php
+                                            echo '<label class="control-label">Clientes</label>';
+                                            echo Select2::widget([
+                                                'model' => $modelcustomer,
+                                                'attribute' => 'id',
+                                                'data' => $datacustomer,
+                                                'options' => [
+                                                    'placeholder' => 'Elegir una opción...',
+                                                    'class' => 'form-control',
+                                                ],
+                                                'pluginOptions' => [
+                                                    'allowClear' => true,
+                                                ],
+                                            ]);
+                                        ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div> 
+                            <br>
+                        </div>
+                    </div>
+
+
+                    
         </div>
     </div>
+
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group">
@@ -170,7 +253,7 @@ use kartik\select2\Select2;
                var total = $("#total").val();
                var total_payment = $("#total_payment").val();
             
-                if(total_payment > 0 && total >= total_payment){
+                if(total_payment > 0 && total_payment <= total){
                     $("#boton-save").show();
                 }else{
                     $("#boton-save").hide();
