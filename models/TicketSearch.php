@@ -65,7 +65,8 @@ class TicketSearch extends Ticket
 
         $query->andWhere(['is', 'id_meeting', new \yii\db\Expression('null')]);
 
-           // ->andFilterWhere(['like', 'description', $this->description]);
+        $query->andFilterWhere(['like', 'date_ticket', $this->date_ticket]);
+        $query->andFilterWhere(['like', 'total', $this->total]);
 
         return $dataProvider;
     }

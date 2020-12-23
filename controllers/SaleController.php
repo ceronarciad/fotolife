@@ -129,11 +129,11 @@ class SaleController extends Controller
     {
         $payment = new Payment();
         $ticket = new Ticket();
-        $products = ArrayHelper::map(Product::find()->select(['id','name'])->all(),'id','name');
+        $products = ArrayHelper::map(Product::find()->select(['id','name'])->where('status>0')->all(),'id','name');
         $transaction = Yii::$app->db->beginTransaction();
         $newdate = date("Y-m-d");
         $modelcustomer = new Customer();
-        $datacustomer=ArrayHelper::map(Customer::find()->select(['id','name'])->all(),'id','name');
+        $datacustomer=ArrayHelper::map(Customer::find()->select(['id','name'])->where('status>0')->all(),'id','name');
         $request = Yii::$app->request->post();
 
         //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

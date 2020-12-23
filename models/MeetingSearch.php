@@ -65,10 +65,12 @@ class MeetingSearch extends Meeting
             'user_id_log' => $this->user_id_log,
         ]);
 
-        $query->where('status>0');
+        //$query->where('status>0');
         
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'start', $this->start])
+            ->andFilterWhere(['like', 'time_init', $this->time_init])
             ->andFilterWhere(['like', 'location', $this->location]);
 
         return $dataProvider;

@@ -76,13 +76,13 @@ class MeetingController extends Controller
     {
         $model = $this->findModel($id);
         $ticket = Ticket::find()->where(['id_meeting' => $model->id])->one();
-        $modelcustomer = Customer::findOne($ticket->id_customer);
+        $modelcustomer = Customer::findOne($ticket->id_customer)->where('status>0');
         //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         //return $ticket;
 
         $ticketDetails = TicketDetail::find()->where(['id_ticket' => $ticket->id])->all();
         $payments = Payment::find()->where(['id_ticket' => $ticket->id])->all();
-        $service = Service::find()->where(['id' => $model->id_service])->one();
+        $service = Service::find()->where(['id' => $model->id_service,'status>0'])->one();
         $totalAmount = 0;
 
         if (sizeof($payments)==0) {
@@ -145,8 +145,8 @@ class MeetingController extends Controller
         $modelticket = new Ticket();
         $modelcustomer = new Customer();
         $modelticketdetails = new TicketDetail();
-        $listData=ArrayHelper::map(Service::find()->select(['id','title'])->all(),'id','title');
-        $listDataCustomer=ArrayHelper::map(Customer::find()->select(['id','name'])->all(),'id','name');
+        $listData=ArrayHelper::map(Service::find()->select(['id','title'])->where('status>0')->all(),'id','title');
+        $listDataCustomer=ArrayHelper::map(Customer::find()->select(['id','name'])->where('status>0')->all(),'id','name');
         
         $transaction = Yii::$app->db->beginTransaction();
         if ($model->load(Yii::$app->request->post()) && $modelcustomer->load(Yii::$app->request->post())) {

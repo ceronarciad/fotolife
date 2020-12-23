@@ -63,6 +63,11 @@ class Ticket extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getCustomerName($id)
+    {
+        return Customer::findOne($id);    
+    }
+
     /**
      * Gets query for [[Payments]].
      *
@@ -81,6 +86,16 @@ class Ticket extends \yii\db\ActiveRecord
     public function getMeeting()
     {
         return $this->hasOne(Meeting::className(), ['id' => 'id_meeting']);
+    }
+
+        /**
+     * Gets query for [[Meeting]].
+     *
+     * @return \yii\db\ActiveQuery|MeetingQuery
+     */
+    public function getCustomer()
+    {
+        return $this->hasOne(Meeting::className(), ['id' => 'id_customer']);
     }
 
     /**

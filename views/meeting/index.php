@@ -29,25 +29,6 @@ $this->title = Yii::t('app', 'Agenda');
             <div class="row">
                 <div class="col-sm-12">
                 <h3>Agenda de eventos
-                    
-                    <?php
-
-                        //echo ModalAjax::widget([
-                            //'id' => 'create',
-                            //'header' => 'Agendar evento',
-                            //'toggleButton' => [
-                            //    'label' => 'Agendar nuevo evento',
-                            //    'class' => 'btn btn-primary pull-right'
-                            //],
-                            //'url' => Url::to(['/meeting/create']), 
-                            //'ajaxSubmit' => true, 
-                            //'size' => ModalAjax::SIZE_LARGE,
-                            //'options' => ['class' => 'header-primary'],
-                            //'autoClose' => true,
-                            //'pjaxContainer' => '#grid-company-pjax',
-                        //]);
-
-                    ?>&nbsp;
                      <?= Html::a(Yii::t('app', 'Agendar evento'), ['create'], ['class' => 'btn btn-primary'])?>
                 </h3>
                 <br><br>
@@ -98,9 +79,3 @@ $this->title = Yii::t('app', 'Agenda');
 <?php Pjax::end(); ?>
 
 </div>
-
-<script>
-    $(document).ready(function() {
-        
-    });
-</script>

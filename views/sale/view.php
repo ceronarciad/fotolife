@@ -8,7 +8,22 @@ use miloschuman\highcharts\Highcharts;
 $this->title = 'Venta '.$ticket->id;
 \yii\web\YiiAsset::register($this);
 ?>
+
+<style>
+    .modal {
+        height: 600px; 
+        margin: 0 auto; 
+    }
+
+</style>
+
 <div class="sale-view">
+
+        <?php
+            \conquer\modal\ModalForm::widget([
+                'selector' => '.modal-form',
+            ]);
+        ?>
     
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

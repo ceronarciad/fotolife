@@ -5,6 +5,7 @@ return [
     'senderEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
     'status' => [
+        -1 => "Eliminado",
         1 => "Agendado",
         2 => "En proceso",
         3 => "Entregado",

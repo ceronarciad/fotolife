@@ -78,6 +78,7 @@ $this->title = $model->title;
                 </div>
             </div>
         </div>
+        
         <?php
             \conquer\modal\ModalForm::widget([
                 'selector' => '.modal-form',
